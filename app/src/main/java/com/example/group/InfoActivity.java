@@ -15,14 +15,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -76,8 +71,8 @@ public class InfoActivity extends AppCompatActivity {
             }
         });
 
-        sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);//Accede a los sensores
-        s = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);//represento al accelerometro
+        sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        s = sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         if(s==null){
             finish();
@@ -86,7 +81,6 @@ public class InfoActivity extends AppCompatActivity {
         evento = new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
-                //Codigo que se genera por el evento del acelerometro
                 if(event.values[0]<-4 && mov==0){
                     mov++;
                 }else{
@@ -97,8 +91,7 @@ public class InfoActivity extends AppCompatActivity {
                 }
                 if(mov==2){
                     mov=0;
-                    System.out.println("Emitir sonido");
-                    System.out.println("Recuento: "+count);
+                    System.out.println("Counter: "+count);
                 }
             }
 
@@ -113,7 +106,7 @@ public class InfoActivity extends AppCompatActivity {
 
     private void postInfo(String name, String course, String year,int count) {
 
-        if(count >= 100){
+        if(count >= 1000){
             Map<String,Object> user = new HashMap<>();
             user.put("name",name);
             user.put("course",course);
@@ -125,13 +118,13 @@ public class InfoActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(InfoActivity.this, "Great", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InfoActivity.this, "Great with accelerometer", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(InfoActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(InfoActivity.this, "Error with accelerometer", Toast.LENGTH_SHORT).show();
                     }
                 });
         }else{
